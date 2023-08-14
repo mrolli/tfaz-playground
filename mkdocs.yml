@@ -1,0 +1,80 @@
+site_name: Terraform Azure Playground
+site_author: "Michael Rolli"
+site_description: >-
+  Easy to follow Logbook of my journey into managing Azure using Terraform.
+
+# Repository
+repo_name: mrolli/myitjournal
+repo_url: https://github.com/mrolli/tfaz-playground
+
+# Copyright
+copyright: "Copyright &copy; 2021 Michael Rolli<br />This work is licensed under a <a rel=\"license\" href=\"http://creativecommons.org/licenses/by-sa/4.0/\">Creative Commons Attribution-ShareAlike 4.0 International License</a>."
+
+
+# Configuration
+theme:
+  name: material
+  icon:
+    logo: fontawesome/solid/chalkboard-user
+  language: en
+  # palette:
+  #   - media: "(prefers-color-scheme: light)"
+  #     scheme: default
+  #     primary: orange
+  #     accent: orange
+  #     toggle:
+  #       icon: material/weather-night
+  #       name: Switch to dark mode
+  #   - media: "(prefers-color-scheme: dark)"
+  #     scheme: slate
+  #     primary: amber
+  #     accent: amber
+  #     toggle:
+  #       icon: material/weather-sunny
+  #       name: Switch to light mode
+  features:
+    - content.code.annotate
+    - content.tabs.link
+    - content.tooltips
+    - navigation.expand
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top
+    - navigation.tracking
+    - search.highlight
+    - search.suggest
+    - toc.follow
+
+plugins:
+  - git-revision-date-localized
+  - search
+
+
+markdown_extensions:
+  - pymdownx.keys
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - toc:
+      toc_depth: 3
+
+extra:
+  social:
+    - icon: fontawesome/brands/github-alt
+      link: https://github.com/mrolli/
+
+extra_css:
+  - stylesheets/extra.css
+
+# Page tree
+nav:
+  - "Home":
+    - "Overview": index.md
+    - "Getting started": getting_started.md
+
