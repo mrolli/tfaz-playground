@@ -4,7 +4,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "=3.0.0"
+      version = "3.69.0"
     }
   }
 }
@@ -14,12 +14,12 @@ provider "azurerm" {
   features {}
 }
 
-resource "azurerm_resource_group" "ttgroup" {
-  name     = "terraform-test"
+resource "azurerm_resource_group" "tf-testgroup" {
+  name     = "unibe-idsys-dev-tf-testgroup"
   location = "switzerlandnorth"
   tags = {
     environment = "dev"
-    division = "id"
+    division    = "id"
     subDivision = "sys"
   }
 }
