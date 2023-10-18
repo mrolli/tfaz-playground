@@ -46,3 +46,13 @@ resource "azurerm_virtual_network" "tf-testnetwork" {
     subDivision = "sys"
   }
 }
+
+# Create a subnet
+#
+# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet
+resource "azurerm_subnet" "tf-subnet-3" {
+  name                 = "unibe-idsys-dev-tf-testnetwork-subnet-3"
+  resource_group_name  = azurerm_resource_group.tf-testgroup.name
+  virtual_network_name = azurerm_virtual_network.tf-testnetwork.name
+  address_prefixes     = ["10.123.3.0/24"]
+}
