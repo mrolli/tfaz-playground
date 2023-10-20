@@ -97,3 +97,81 @@ resource "azurerm_subnet_network_security_group_association" "tf-dev-secgroup-su
   subnet_id                 = azurerm_subnet.tf-subnet-3.id
   network_security_group_id = azurerm_network_security_group.tf-dev-secgroup.id
 }
+
+# Create a public IP address_prefixes
+# This is required to allow SSH access to the VMs in the subnet.
+#
+# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/public_ip
+resource "azurerm_public_ip" "tf-dev-pubip-devhost" {
+  name                = "unibe-idsys-dev-tf-testnetwork-pubip-devhost"
+  resource_group_name = azurerm_resource_group.tf-testgroup.name
+  location            = azurerm_resource_group.tf-testgroup.location
+  allocation_method   = "Dynamic"
+
+  tags = {
+    environment = "dev"
+    division    = "id"
+    subDivision = "sys"
+  }
+}
+
+# Create a network interface
+# This is required to allow SSH access to the VMs in the subnet.
+#
+# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_interface
+resource "azurerm_network_interface" "tf-dev-nic-devhost" {
+  name                = "unibe-idsys-dev-tf-testnetwork-nic-devhost"
+  resource_group_name = azurerm_resource_group.tf-testgroup.name
+  location            = azurerm_resource_group.tf-testgroup.location
+
+  ip_configuration {
+    name                          = "unibe-idsys-dev-tf-testnetwork-nic-devhost-ipconfig"
+    subnet_id                     = azurerm_subnet.tf-subnet-3.id
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.tf-dev-pubip-devhost.id
+  }
+
+  tags = {
+    environment = "dev"
+    division    = "id"
+    subDivision = "sys"
+  }
+}
+
+# Create a virtual machine
+#
+# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_virtual_machine
+resource "azurerm_linux_virtual_machine" "tf-dev-vm-devhost" {
+  name                  = "unibe-idsys-dev-tf-testnetwork-vm-devhost"
+  computer_name         = "michisdevhoset"
+  resource_group_name   = azurerm_resource_group.tf-testgroup.name
+  location              = azurerm_resource_group.tf-testgroup.location
+  size                  = "Standard_B1s"
+  admin_username        = "adminuser"
+  network_interface_ids = [azurerm_network_interface.tf-dev-nic-devhost.id]
+
+  admin_ssh_key {
+    username   = "adminuser"
+    public_key = file("~/.ssh/id_rsa.pub")
+  }
+
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
+
+  # on how to find image information see
+  # https://learn.microsoft.com/en-us/azure/virtual-machines/linux/cli-ps-findimage
+  source_image_reference {
+    publisher = "Canonical"
+    offer     = "0001-com-ubuntu-server-jammy"
+    sku       = "22_04-lts-gen2"
+    version   = "latest"
+  }
+
+  tags = {
+    environment = "dev"
+    division    = "id"
+    subDivision = "sys"
+  }
+}
