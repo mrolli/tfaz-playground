@@ -150,6 +150,8 @@ resource "azurerm_linux_virtual_machine" "tf-dev-vm-devhost" {
   admin_username        = "adminuser"
   network_interface_ids = [azurerm_network_interface.tf-dev-nic-devhost.id]
 
+  custom_data = filebase64("customdata.tpl")
+
   admin_ssh_key {
     username   = "adminuser"
     public_key = file("~/.ssh/id_rsa.pub")
@@ -161,6 +163,7 @@ resource "azurerm_linux_virtual_machine" "tf-dev-vm-devhost" {
   }
 
   # on how to find image information see
+  #
   # https://learn.microsoft.com/en-us/azure/virtual-machines/linux/cli-ps-findimage
   source_image_reference {
     publisher = "Canonical"
