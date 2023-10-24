@@ -172,6 +172,19 @@ resource "azurerm_linux_virtual_machine" "tf-dev-vm-devhost" {
     version   = "latest"
   }
 
+  # Provisioner to get ip_configuration
+  #
+  # https://developer.hashicorp.com/terraform/language/resources/provisioners/syntax#provisioners
+  # https://developer.hashicorp.com/terraform/language/functions/templatefile
+  provisioner "local-exec" {
+    command = templatefile("linux-add-ssh-config-script.tpl", {
+      hostname     = self.public_ip_address,
+      user         = "adminuser",
+      identityfile = "~/.ssh/id_rsa"
+    })
+    interpreter = ["bash", "-c"]
+  }
+
   tags = {
     environment = "dev"
     division    = "id"
