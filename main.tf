@@ -178,12 +178,12 @@ resource "azurerm_linux_virtual_machine" "tf-dev-vm-devhost" {
   # https://developer.hashicorp.com/terraform/language/resources/provisioners/syntax#provisioners
   # https://developer.hashicorp.com/terraform/language/functions/templatefile
   provisioner "local-exec" {
-    command = templatefile("linux-add-ssh-config-script.tpl", {
+    command = templatefile("${var.host_os}-add-ssh-config-script.tpl", {
       hostname     = self.public_ip_address,
       user         = "adminuser",
       identityfile = "~/.ssh/id_rsa"
     })
-    interpreter = ["bash", "-c"]
+    interpreter = var.host_os == "linux" ? ["bash", "-c"] : ["Powershell", "-Command"]
   }
 
   tags = {
