@@ -1,3 +1,13 @@
+# Configure the Microsoft Azure Provider
+#
+# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs
+provider "azurerm" {
+  features {}
+  tenant_id                  = var.tenant_id
+  subscription_id            = var.subscription_id
+  skip_provider_registration = true
+}
+
 # We strongly recommend using the required_providers block to set the
 # Azure Provider source and version being used
 terraform {
@@ -9,14 +19,6 @@ terraform {
   }
 }
 
-# Configure the Microsoft Azure Provider
-#
-# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs
-provider "azurerm" {
-  # skip_provider_registration = true
-  features {}
-}
-
 # Create a resource group
 #
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group
@@ -24,11 +26,7 @@ resource "azurerm_resource_group" "tf-testgroup" {
   name     = "unibe-idsys-dev-tf-testgroup"
   location = "switzerlandnorth"
 
-  tags = {
-    environment = "dev"
-    division    = "id"
-    subDivision = "sys"
-  }
+  tags = var.project-tags
 }
 
 # Create a virtual network
@@ -41,11 +39,7 @@ resource "azurerm_virtual_network" "tf-testnetwork" {
   location            = azurerm_resource_group.tf-testgroup.location
   address_space       = ["10.123.0.0/16"]
 
-  tags = {
-    environment = "dev"
-    division    = "id"
-    subDivision = "sys"
-  }
+  tags = var.project-tags
 }
 
 # Create a subnet
@@ -66,11 +60,7 @@ resource "azurerm_network_security_group" "tf-dev-secgroup" {
   resource_group_name = azurerm_resource_group.tf-testgroup.name
   location            = azurerm_resource_group.tf-testgroup.location
 
-  tags = {
-    environment = "dev"
-    division    = "id"
-    subDivision = "sys"
-  }
+  tags = var.project-tags
 }
 
 # Create security rule to allow SSH access from the ID network
@@ -109,11 +99,7 @@ resource "azurerm_public_ip" "tf-dev-pubip-devhost" {
   location            = azurerm_resource_group.tf-testgroup.location
   allocation_method   = "Dynamic"
 
-  tags = {
-    environment = "dev"
-    division    = "id"
-    subDivision = "sys"
-  }
+  tags = var.project-tags
 }
 
 # Create a network interface
@@ -132,11 +118,7 @@ resource "azurerm_network_interface" "tf-dev-nic-devhost" {
     public_ip_address_id          = azurerm_public_ip.tf-dev-pubip-devhost.id
   }
 
-  tags = {
-    environment = "dev"
-    division    = "id"
-    subDivision = "sys"
-  }
+  tags = var.project-tags
 }
 
 # Create a virtual machine
@@ -186,11 +168,7 @@ resource "azurerm_linux_virtual_machine" "tf-dev-vm-devhost" {
     interpreter = var.host_os == "linux" ? ["bash", "-c"] : ["Powershell", "-Command"]
   }
 
-  tags = {
-    environment = "dev"
-    division    = "id"
-    subDivision = "sys"
-  }
+  tags = var.project-tags
 }
 
 # Data Source
