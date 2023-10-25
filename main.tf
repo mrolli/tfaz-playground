@@ -13,6 +13,7 @@ terraform {
 #
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs
 provider "azurerm" {
+  # skip_provider_registration = true
   features {}
 }
 
@@ -190,4 +191,21 @@ resource "azurerm_linux_virtual_machine" "tf-dev-vm-devhost" {
     division    = "id"
     subDivision = "sys"
   }
+}
+
+# Data Source
+#
+# https://developer.hashicorp.com/terraform/language/data-sources
+# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/public_ip
+data "azurerm_public_ip" "tf-dev-pubip-data" {
+  name                = azurerm_public_ip.tf-dev-pubip-devhost.name
+  resource_group_name = azurerm_resource_group.tf-testgroup.name
+}
+
+# Outputs
+#
+# https://developer.hashicorp.com/terraform/language/values/outputs
+#
+output "public_ip_address" {
+  value = "${azurerm_linux_virtual_machine.tf-dev-vm-devhost.name}:${data.azurerm_public_ip.tf-dev-pubip-data.ip_address}"
 }
