@@ -65,3 +65,44 @@ data "vsphere_folder" "linux_betrieb" {
 data "vsphere_folder" "opencast-test" {
   path = "${data.vsphere_folder.linux_betrieb.path}/Opencast-test"
 }
+
+# Create a new virtual machine from template
+#
+# https://www.terraform.io/docs/providers/vsphere/r/virtual_machine.html
+# https://registry.terraform.io/providers/hashicorp/vsphere/latest/docs/resources/virtual_machine#creating-a-virtual-machine-from-a-template
+# https://registry.terraform.io/providers/hashicorp/vsphere/latest/docs/resources/virtual_machine#cloning-and-customization
+resource "vsphere_virtual_machine" "idmrollidev01" {
+  name             = "ID_SYS_idmrollidev01"
+  resource_pool_id = "resgroup-1653170"
+  folder           = data.vsphere_folder.opencast-test.path
+  # resource_pool_id = data.vsphere_virtual_machine.tpl_rocky8_vr.resource_pool_id
+  guest_id  = data.vsphere_virtual_machine.tpl_rocky8_vr.guest_id
+  scsi_type = data.vsphere_virtual_machine.tpl_rocky8_vr.scsi_type
+  num_cpus  = 1
+  memory    = 1024
+  network_interface {
+    network_id   = data.vsphere_network.net-zb21-id-dev-10.id
+    adapter_type = data.vsphere_virtual_machine.tpl_rocky8_vr.network_interface_types.0
+  }
+  disk {
+    label            = "disk0"
+    size             = data.vsphere_virtual_machine.tpl_rocky8_vr.disks.0.size
+    thin_provisioned = true # true is the default
+  }
+  # Clone from template
+  # https://registry.terraform.io/providers/hashicorp/vsphere/latest/docs/resources/virtual_machine#cloning-and-customization
+  clone {
+    template_uuid = data.vsphere_virtual_machine.tpl_rocky8_vr.id
+    customize {
+      linux_options {
+        host_name = "idmrolldev01"
+        domain    = "test.unibe.ch"
+      }
+      network_interface {
+        ipv4_address = "130.92.10.248"
+        ipv4_netmask = 24
+      }
+      ipv4_gateway = "130.92.10.1"
+    }
+  }
+}
