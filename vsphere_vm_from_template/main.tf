@@ -48,12 +48,20 @@ data "vsphere_network" "net-zb21-id-dev-10" {
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
-data "vsphere_virtual_machine" "vmtemplate_rocky8_vr" {
+data "vsphere_virtual_machine" "tpl_rocky8_vr" {
   name          = "ID_SYS_rocky8_template_VR"
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
-data "vsphere_virtual_machine" "vmtemplate_rocky8_ex" {
+data "vsphere_virtual_machine" "tpl_rocky8_ex" {
   name          = "ID_SYS_rocky8_template_EX"
   datacenter_id = data.vsphere_datacenter.dc.id
+}
+
+data "vsphere_folder" "linux_betrieb" {
+  path = "VI IDunibe/vm/ID SYSTEMS/Linux_Betrieb"
+}
+
+data "vsphere_folder" "opencast-test" {
+  path = "${data.vsphere_folder.linux_betrieb.path}/Opencast-test"
 }
