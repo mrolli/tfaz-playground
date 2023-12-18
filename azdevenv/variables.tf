@@ -2,11 +2,6 @@ variable "host_os" {
   type = string
 }
 
-variable "project-tags" {
+variable "project_tags" {
   type = map(string)
-  default = {
-    environment = "dev"
-    division    = "id"
-    subDivision = "sys"
-  }
 }

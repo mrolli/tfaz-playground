@@ -1,3 +1,10 @@
+locals {
+  project_tags = {
+    environment = "dev"
+    division    = "id"
+    subDivision = "sys"
+  }
+}
 
 # Create a resource group
 #
@@ -6,7 +13,7 @@ resource "azurerm_resource_group" "tf-testgroup" {
   name     = "unibe-idsys-dev-tf-testgroup"
   location = "switzerlandnorth"
 
-  tags = var.project-tags
+  tags = var.project_tags
 }
 
 # Create a virtual network
@@ -19,7 +26,7 @@ resource "azurerm_virtual_network" "tf-testnetwork" {
   location            = azurerm_resource_group.tf-testgroup.location
   address_space       = ["10.123.0.0/16"]
 
-  tags = var.project-tags
+  tags = var.project_tags
 }
 
 # Create a subnet
@@ -40,7 +47,7 @@ resource "azurerm_network_security_group" "tf-dev-secgroup" {
   resource_group_name = azurerm_resource_group.tf-testgroup.name
   location            = azurerm_resource_group.tf-testgroup.location
 
-  tags = var.project-tags
+  tags = var.project_tags
 }
 
 # Create security rule to allow SSH access from the ID network
@@ -79,7 +86,7 @@ resource "azurerm_public_ip" "tf-dev-pubip-devhost" {
   location            = azurerm_resource_group.tf-testgroup.location
   allocation_method   = "Dynamic"
 
-  tags = var.project-tags
+  tags = var.project_tags
 }
 
 # Create a network interface
@@ -98,7 +105,7 @@ resource "azurerm_network_interface" "tf-dev-nic-devhost" {
     public_ip_address_id          = azurerm_public_ip.tf-dev-pubip-devhost.id
   }
 
-  tags = var.project-tags
+  tags = var.project_tags
 }
 
 # Create a virtual machine
@@ -148,7 +155,7 @@ resource "azurerm_linux_virtual_machine" "tf-dev-vm-devhost" {
     interpreter = var.host_os == "linux" ? ["bash", "-c"] : ["Powershell", "-Command"]
   }
 
-  tags = var.project-tags
+  tags = var.project_tags
 }
 
 # Data Source
