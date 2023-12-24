@@ -1,3 +1,4 @@
+# https://developer.hashicorp.com/packer/tutorials/docker-get-started/docker-get-started-build-image
 packer {
   required_plugins {
     docker = {
