@@ -22,10 +22,16 @@ source "docker" "ubuntu" {
   commit = true
 }
 
+source "docker" "ubuntu-focal" {
+  image  = "ubuntu:focal"
+  commit = true
+}
+
 build {
   name    = "learn-packer"
   sources = [
-    "source.docker.ubuntu"
+    "source.docker.ubuntu",
+    "source.docker.ubuntu-focal"
   ]
 
   provisioner "shell" {
@@ -39,6 +45,6 @@ build {
   }
 
   provisioner "shell" {
-    inline = ["echo Running ${var.docker_image} Docker image"]
+    inline = ["echo Running $(cat /etc/os-release | grep VERSION= | sed 's/\"//g' | sed 's/VERSION=//g') Docker image."]
   }
 }
