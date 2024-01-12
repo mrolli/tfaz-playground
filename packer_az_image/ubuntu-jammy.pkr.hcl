@@ -18,6 +18,9 @@ locals {
 }
 
 
+# Azure RecoureManagement builder
+#
+# https://www.packer.io/docs/builders/azure/arm
 source "azure-arm" "ubuntu-jammy-base" {
   os_type                   = "Linux"
   build_resource_group_name = var.az_resource_group
@@ -30,15 +33,18 @@ source "azure-arm" "ubuntu-jammy-base" {
   image_version   = "latest"
 
   # Destination image
+  #
+  # https://www.packer.io/docs/builders/azure/arm#shared-image-gallery-destination
   managed_image_name                = local.image_name
   managed_image_resource_group_name = var.az_resource_group
-    shared_image_gallery_destination {
+  shared_image_gallery_destination {
     subscription         = var.az_subscription_id
     resource_group       = var.az_resource_group
     gallery_name         = var.az_image_gallery
     image_name           = "ubuntu22-base"
     image_version        = formatdate("YYYY.MMDD.hhmm", timestamp())
     replication_regions  = [var.az_region]
+    # replica_count        = 2
     storage_account_type = "Standard_LRS"
   }
 
