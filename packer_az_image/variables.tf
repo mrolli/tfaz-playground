@@ -25,6 +25,11 @@ variable "azure_resource_group" {
   type        = string
 }
 
+variable "azure_image_gallery_name" {
+  description = "Azure Image Gallery name where packer will create images"
+  type        = string
+}
+
 variable "azure_tags" {
   description = "Standard Azure tags to apply to resources"
   type        = map(string)

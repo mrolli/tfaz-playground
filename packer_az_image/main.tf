@@ -8,6 +8,14 @@ resource "azurerm_resource_group" "rg-packerimgreg" {
   tags = var.azure_tags
 }
 
+resource "azurerm_shared_image_gallery" "idsys-image-gallery" {
+  name                = "gal_idsys_images_dev_001"
+  location            = var.azure_region
+  resource_group_name = azurerm_resource_group.rg-packerimgreg.name
+  description         = "Image gallery for ${var.azure_image_gallery_name}"
+  tags                = var.azure_tags
+
+}
 # data "azuread_client_config" "current" {}
 
 # Create a service principal with role Contributor in current subscription scope

@@ -20,25 +20,6 @@ variable "az_subscription_id" {
   sensitive   = true
 }
 
-variable "az_tenant_id" {
-  description = "Your Azure Tenant ID (if not specified it is looked up with the subscription_id)."
-  type        = string
-  sensitive   = true
-}
-
-variable "az_client_id" {
-  description = "Your Azure service principal's id to use."
-  type        = string
-  sensitive   = true
-}
-
-variable "az_client_secret" {
-  description = "Your Azure service principals shared secret to use."
-  type        = string
-  sensitive   = true
-}
-
-
 variable "division" {
   description = "A value for the \"division\" tag."
   type        = string
