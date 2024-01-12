@@ -42,6 +42,10 @@ source "azure-arm" "ubuntu-jammy-base" {
     storage_account_type = "Standard_LRS"
   }
 
+  # Authentication using a service principal
+  client_id       = var.az_client_id
+  client_secret   = var.az_client_secret
+  subscription_id = var.az_subscription_id
 
   azure_tags = {
     division       = var.division
