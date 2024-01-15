@@ -17,7 +17,12 @@ resource "azurerm_shared_image_gallery" "idsys-image-gallery" {
   location            = var.azure_region
   resource_group_name = azurerm_resource_group.rg-packerimgreg.name
   description         = "Image gallery for ${var.azure_image_gallery_name}"
-  tags                = var.azure_tags
+
+  # sharing {
+  #   permission = "Groups"
+  # }
+  #
+  tags = var.azure_tags
 }
 
 # Within the compute gallery, create an image definition for which packer can
