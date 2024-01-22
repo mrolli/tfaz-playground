@@ -1,11 +1,3 @@
-locals {
-  project_tags = {
-    environment = "dev"
-    division    = "id"
-    subDivision = "sys"
-  }
-}
-
 # Create a resource group
 #
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group
