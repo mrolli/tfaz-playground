@@ -41,19 +41,19 @@ variable "stage" {
   }
 }
 
-variable "azlocation" {
+variable "location" {
   description = "Azure region where Terraform will create resources"
   type        = string
   default     = "switzerlandnorth"
 
   validation {
-    # condition     = contains(["switzerlandnorth", "switzerlandwest"], var.azlocation)
-    condition     = contains(["switzerlandnorth"], var.azlocation)
-    error_message = "Valid value for var: azlocation is \"switzerlandnorth\""
+    # condition     = contains(["switzerlandnorth", "switzerlandwest"], var.location)
+    condition     = contains(["switzerlandnorth"], var.location)
+    error_message = "Valid value for var: location is \"switzerlandnorth\""
   }
 }
 
-variable "azproject_tags" {
+variable "project_tags" {
   description = "Standard Azure tags to apply to resources"
   type        = map(string)
 }
