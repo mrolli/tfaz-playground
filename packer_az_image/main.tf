@@ -50,7 +50,7 @@ resource "azurerm_resource_group" "rg-service" {
 # }
 
 # Assign the Contributor role to the service principal in the resource group scope
-resource "azurerm_role_assignment" "role-packerimgreg" {
+resource "azurerm_role_assignment" "role-sp-to-rg-service" {
   scope                = azurerm_resource_group.rg-service.id
   role_definition_name = "Contributor"
   principal_id         = module.service_principal.service_principal_id
