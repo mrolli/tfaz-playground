@@ -1,7 +1,3 @@
-output "tenant_id" {
-  value = var.tenant_id
-}
-
 output "subscription_id" {
   value = var.subscription_id
 }
