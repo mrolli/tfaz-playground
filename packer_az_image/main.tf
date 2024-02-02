@@ -98,3 +98,16 @@ resource "azurerm_shared_image" "sysimg-ubuntu2204-base" {
 
   tags = var.project_tags
 }
+
+resource "local_sensitive_file" "pkrvars" {
+  filename = "${path.module}/variables.auto.pkrvars.json"
+  content = jsonencode({
+    subscription_id = var.subscription_id
+    resource_group  = azurerm_resource_group.rg-service.name
+    image_gallery   = azurerm_shared_image_gallery.gal-sysimages.name
+    client_id       = module.service_principal.service_principal_id
+    client_secret   = module.service_principal.password
+    region          = var.location
+    project_tags    = var.project_tags
+  })
+}

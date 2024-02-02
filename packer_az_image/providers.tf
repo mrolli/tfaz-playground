@@ -8,6 +8,14 @@ provider "azurerm" {
   skip_provider_registration = true
 }
 
+# Configure the Azure Active Directory Provider
+#
+# https://registry.terraform.io/providers/hashicorp/azuread/latest/docs
 provider "azuread" {
   tenant_id = var.tenant_id
 }
+
+# Configure the Local Provider
+#
+# https://registry.terraform.io/providers/hashicorp/local/latest/docs
+provider "local" {}
