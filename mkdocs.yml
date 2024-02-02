@@ -8,8 +8,7 @@ repo_name: mrolli/myitjournal
 repo_url: https://github.com/mrolli/tfaz-playground
 
 # Copyright
-copyright: "Copyright &copy; 2021 Michael Rolli<br />This work is licensed under a <a rel=\"license\" href=\"http://creativecommons.org/licenses/by-sa/4.0/\">Creative Commons Attribution-ShareAlike 4.0 International License</a>."
-
+copyright: 'Copyright &copy; 2021 Michael Rolli<br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.'
 
 # Configuration
 theme:
@@ -49,7 +48,6 @@ plugins:
   - git-revision-date-localized
   - search
 
-
 markdown_extensions:
   - pymdownx.keys
   - pymdownx.superfences:
@@ -75,7 +73,7 @@ extra_css:
 # Page tree
 nav:
   - "Home":
-    - "Overview": index.md
-    - "Getting started": getting_started.md
-    - "Terraform FAQ": terraform_faq.md
-
+      - "Overview": index.md
+      - "Getting started": getting_started.md
+      - "Azure FAQ": faq_azure.md
+      - "Terraform FAQ": faq_terraform.md
