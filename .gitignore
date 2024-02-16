@@ -15,6 +15,8 @@ crash.*.log
 # to change depending on the environment.
 *.tfvars
 *.tfvars.json
+*.tfbackend
+*.tfbackend.json
 
 # Exclude all pkrvars.hcl files, which are likely to contain sensitive data, such as
 # password, private keys, and other secrets. These should not be part of version
