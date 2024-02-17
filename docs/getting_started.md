@@ -62,3 +62,8 @@ First, we need some tools to our work:
     There are official repos for a bunch of Linux distros, see the [official
     documentation](https://developer.hashicorp.com/terraform/tutorials/docker-get-started/install-cli)
     for more information on the distro of choice.
+
+## Resources
+
+- [Terraform on Azure Documentation](https://learn.microsoft.com/en-us/azure/developer/terraform/)
+- [Configure Terraform in Azure Cloud Shell with Bash](https://learn.microsoft.com/en-us/azure/developer/terraform/get-started-cloud-shell-bash?tabs=bash)
