@@ -7,5 +7,5 @@ variable "vsphere_password" {
 }
 
 variable "vsphere_server" {
-  type    = string
+  type = string
 }
