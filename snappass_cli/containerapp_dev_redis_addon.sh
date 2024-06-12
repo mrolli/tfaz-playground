@@ -58,6 +58,8 @@ az containerapp up \
   --name $ca_name \
   --resource-group $resource_group \
   --environment $ca_environment \
+  --min-replicas 1 \
+  --max-replicas 1 \
   --source="./snappass/" \
   --location $location \
   --browse
