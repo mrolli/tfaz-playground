@@ -19,8 +19,7 @@ location="switzerlandnorth"
 log_analytics_workspace="log-$service-$environment"
 ca_name="ca-$service-$environment"
 ca_environment="cae-$service-$environment"
-# container add-on binding complains about - and _
-ca_addon_redis="caa${service//-/}redis${environment}"
+ca_addon_redis="caa-${service}-redis-${environment}"
 
 az group create \
   --name $resource_group \
@@ -63,7 +62,10 @@ az containerapp up \
   --location $location \
   --browse
 
+# The binding name of container add-ons is limited alphanum and undscores
+# therefore set replace the dashes with underscore for the explicit
+# binding name to be able to have a service name with dashes.
 az containerapp update \
   --name $ca_name \
-  --bind $ca_addon_redis \
+  --bind "$ca_addon_redis:${ca_addon_redis//-/_}" \
   --resource-group $resource_group
