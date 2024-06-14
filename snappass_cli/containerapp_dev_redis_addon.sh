@@ -20,10 +20,12 @@ log_analytics_workspace="log-$service-$environment"
 ca_name="ca-$service-$environment"
 ca_environment="cae-$service-$environment"
 ca_addon_redis="caa-${service}-redis-${environment}"
+tags="environment=$environment division=id subDivision=idsys managedBy=azcli"
 
 az group create \
   --name $resource_group \
-  --location $location
+  --location $location \
+  --tags $tags
 
 az monitor log-analytics workspace create \
   --resource-group $resource_group \
