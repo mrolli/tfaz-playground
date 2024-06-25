@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+# This startup script is not used currenly. It was part of try and error during
+# the webapp use case. Although, it's still here for documentation purposes.
+#
+# This commented scirpt aat the bottom is what Azure is setting up on its own.
+# I'm wodering where the value for APP_PATH is coming from as it is hardcoded here.
+#
 python3 -m venv .venv
 source venv/bin/activate
 pip3 install -r requirements.txt
