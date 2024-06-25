@@ -9,7 +9,6 @@
 
 if [ ! -d snappass ]; then
   git clone https://github.com/id-unibe-ch/snappass
-  git -C snappass checkout 369-envvar-redis-password
 fi
 
 service="snappass-cli-redis"
