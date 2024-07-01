@@ -131,10 +131,10 @@ az webapp config appsettings set \
   --name $appservice_name \
   --settings REDIS_URL="$redis_url" SCM_DO_BUILD_DURING_DEPLOYMENT=1
 
-echo "Starting the webapp"
-az webapp start \
-  --resource-group $resource_group \
-  --name $appservice_name
+# echo "Starting the webapp"
+# az webapp start \
+#   --resource-group $resource_group \
+#   --name $appservice_name
 
 # echo "Setting up logging"
 # az webapp log config \
