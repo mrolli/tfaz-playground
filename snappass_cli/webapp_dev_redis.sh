@@ -125,6 +125,11 @@ az monitor diagnostic-settings create --resource "$webapp_id" \
  --logs '[{"category": "AppServiceConsoleLogs", "enabled": true},
   {"category": "AppServiceHTTPLogs", "enabled": true}]'
 
+echo "Enable system-assigned managed identity for the web app"
+az webapp identity assign \
+  -g $resource_group \
+  -n $appservice_name
+
 echo "Set App Settings like REDIS_URL"
 az webapp config appsettings set \
   --resource-group $resource_group \
