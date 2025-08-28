@@ -15,8 +15,8 @@ tags="environment=$environment division=id subDivision=idci managedBy=azcli"
 sku_stapp="Free"
 
 # Resource names
-resource_group_name=$(printf "rg-%s" "$service")
-static_webapp_name=$(printf "stapp-%s" "$service")
+resource_group_name=$(printf "rg-%s-%s" "$service" "$environment")
+static_webapp_name=$(printf "stapp-%s-%s" "$service" "$environment")
 
 if [ "$1" == "-d" ]; then
   az group delete \
