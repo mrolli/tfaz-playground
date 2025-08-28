@@ -1,0 +1,4 @@
+{
+  "image": "ghcr.io/id-unibe-ch/cloud-azure-alz-devcontainer:latest",
+  "postCreateCommand": "pre-commit install"
+}
