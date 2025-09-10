@@ -1,27 +1,28 @@
 #!/usr/bin/env bash
 
-set -e
-
-github_repo_url="https://github.com/mrolli/books"
-branch="main"
-app_path="/Bibliothek"
-custom_url="cloud-books.rollis.ch"
-
-service="books-azcli"
-location="westeurope"
+workload_name="my-workload"
+region=westeurope
 environment="test"
-tags="environment=$environment division=id subDivision=idci managedBy=azcli"
-#randsuffix=$(LC_ALL=C tr -dc "a-z0-9" </dev/urandom | head -c 3)
-sku_stapp="Free"
+tags="environment=$environment division=my_div subDivision=my_ou managedBy=azcli"
 
-# Resource names
-resource_group_name=$(printf "rg-%s-%s" "$service" "$environment")
-static_webapp_name=$(printf "stapp-%s-%s" "$service" "$environment")
+repo_url="owner/repo"
+#repo_url=$(git remote -v | awk '/origin.*push/{gsub(/\.git$/, "", $2); print $2}')
+branch="main"
+app_location="/"
+api_location=""
+output_location=""
+custom_url=""
+ghtoken="" # GitHub token with repo and workflow scopes
+static_web_app_sku="Free" # or "Standard"
 
-if [ "$1" == "-d" ]; then
-  az group delete \
-    --name "$resource_group_name" \
-    --yes --no-wait
+### End of coniguration ###
+
+resource_group_name=$(printf "rg-%s-%s" "$workload_name" "$environment")
+static_web_app_name=$(printf "stapp-%s-%s" "$workload_name" "$environment")
+
+if [[ "$1" == "-d" ]]; then
+  echo "Cleaning up resources. This may take a few minutes."
+  az group delete --name "$resource_group_name" | exit 1
   exit 0
 fi
 
@@ -29,36 +30,60 @@ fi
 if ! az group show --name "$resource_group_name" &>/dev/null; then
   az group create \
     --name "$resource_group_name" \
-    --location "$location" \
+    --location "$region" \
     --tags $tags \
-    --query "name"
+    --query "name" || exit 1
 fi
 
 # Create static web app
-if ! az staticwebapp show -n "$static_webapp_name" -g "$resource_group_name" &>/dev/null; then
+if ! az staticwebapp show -n "$static_web_app_name" -g "$resource_group_name" &>/dev/null; then
   az staticwebapp create \
-    --name "$static_webapp_name" \
+    --name "$static_web_app_name" \
     --resource-group "$resource_group_name" \
-    --location "$location" \
-    --source "$github_repo_url" \
+    --location "$region" \
+    --source "$repo_url" \
     --branch "$branch" \
-    --app-location "$app_path" \
+    --app-location "$app_location" \
+    --api-location "$api_location" \
+    --output-location "$output_location" \
+    --sku "$static_web_app_sku" \
     --login-with-github \
-    --sku "$sku_stapp" \
-    --query "defaultHostname"
-  # --token $github_token
+    --query "defaultHostname" || exit 1
+  # --token $ghtoken
 fi
 
-if ! az staticwebapp hostname show -n "$static_webapp_name" -g "$resource_group_name" \
-  --hostname "$custom_url" &>/dev/null; then
-  az staticwebapp hostname set \
-    --name "$static_webapp_name" \
-    --hostname "$custom_url" \
-    --no-wait
-else
-  az staticwebapp hostname show \
-    --name "$static_webapp_name" \
-    --resource-group "$resource_group_name" \
-    --hostname "$custom_url" \
-    --query "{name:name,status:status}"
+if [ ! -z "$custom_url" ]; then
+  if ! az staticwebapp hostname show -n "$static_web_app_name" -g "$resource_group_name" \
+    --hostname "$custom_url" &>/dev/null; then
+    az staticwebapp hostname set \
+      --name "$static_web_app_name" \
+      --hostname "$custom_url" \
+      --no-wait || exit 1
+  else
+    az staticwebapp hostname show \
+      --name "$static_web_app_name" \
+      --resource-group "$resource_group_name" \
+      --hostname "$custom_url" \
+      --query "{name:name,status:status}" || exit 1
+  fi
 fi
+
+webapp_url=$(az staticwebapp show --name "$static_web_app_name" --resource-group "$resource_group_name" --query "defaultHostname" -o tsv)
+
+runtime="+1M"
+endtime=$(date -v${runtime} +%s)
+
+while [[ $(date +%s) -le $endtime ]]; do
+  if curl -I -s "$webapp_url" >/dev/null; then
+    break
+  else
+    sleep 5
+  fi
+done
+
+echo ""
+echo "You can now visit your web app at https://$webapp_url"
+[ ! -z "$custom_url" ] && echo "The web app is equally available at https://$custom_url"
+echo
+echo "The rendered page will be visible as soon as the workflow action has been run successfully."
+echo "See $repo_url/actions"
