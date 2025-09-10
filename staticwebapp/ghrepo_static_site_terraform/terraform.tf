@@ -21,5 +21,6 @@ provider "azurerm" {
   }
 }
 
-provider "github" {}
-
+provider "github" {
+  owner = var.github_organisation
+}

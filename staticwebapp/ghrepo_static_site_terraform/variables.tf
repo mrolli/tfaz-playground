@@ -38,9 +38,22 @@ variable "resource_name_workload" {
   }
 }
 
-variable "repository_full_name" {
+variable "github_organisation" {
   type        = string
-  description = "The full name of the repo, owner/repo."
+  description = "The GitHub organisation where the repository is located."
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9-]+$", var.github_organisation))
+    error_message = "The GitHub organisation must only contain letters, numbers and dashes"
+  }
+  validation {
+    condition     = length(var.github_organisation) <= 39
+    error_message = "The GitHub organisation must be 39 characters or less"
+  }
+}
+
+variable "repository_name" {
+  type        = string
+  description = "The name of the repo without the organisation."
 }
 
 variable "repository_branch" {
@@ -86,8 +99,8 @@ variable "resource_name_templates" {
   type        = map(string)
   description = "A map of resource names to use"
   default = {
-    resource_group_name = "rg-$${workload}-$${environment}-$${uniqueness}"
-    staticwebapp_name   = "stapp-$${workload}-$${environment}-$${uniqueness}"
+    resource_group_name = "rg-$${workload}-$${environment}"
+    staticwebapp_name   = "stapp-$${workload}-$${environment}"
   }
 }
 

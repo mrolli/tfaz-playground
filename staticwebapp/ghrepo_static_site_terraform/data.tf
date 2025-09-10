@@ -1,7 +1,7 @@
 data "azurerm_client_config" "current" {}
 
 data "github_repository" "staticwebapp" {
-  full_name = var.repository_full_name
+  name = var.repository_name
 }
 
 module "regions" {

@@ -17,7 +17,7 @@ resource "github_repository_file" "workflow_file" {
     }
   )
   commit_message      = "Update Azure deployment workflow (by Terraform)"
-  commit_author       = "Michael Rolli"
-  commit_email        = "michael@rollis.ch"
   overwrite_on_create = true
+
+  depends_on = [github_actions_secret.api_token]
 }
